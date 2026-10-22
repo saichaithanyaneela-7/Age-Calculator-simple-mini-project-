@@ -1,0 +1,69 @@
+<html>
+<head>
+  <title>Age Calculator</title>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Age Calculator</h2>
+
+    <label for="birthdate">Enter your birthdate:</label>
+    <br>
+    <input type="date" id="birthdate">
+    <br>
+
+    <button onclick="calculateAge()">Calculate Age</button>
+
+    <p id="result"></p>
+  </div>
+
+  <script>
+    // Set today's date as the maximum birthdate
+    document.getElementById("birthdate").max =
+      new Date().toLocaleDateString("en-CA");
+
+    function calculateAge() {
+      const input = document.getElementById("birthdate").value;
+      const result = document.getElementById("result");
+
+      if (!input) {
+        result.innerText = "Please enter your birthdate.";
+        return;
+      }
+
+      const birthdate = new Date(input + "T00:00:00");
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (birthdate > today) {
+        result.innerText = "Birthdate cannot be in the future.";
+        return;
+      }
+
+      let years = today.getFullYear() - birthdate.getFullYear();
+      let months = today.getMonth() - birthdate.getMonth();
+      let days = today.getDate() - birthdate.getDate();
+
+      if (days < 0) {
+        months--;
+
+        const previousMonthDays = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          0
+        ).getDate();
+
+        days += previousMonthDays;
+      }
+
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      result.innerText =
+        `You are ${years} years, ${months} months, and ${days} days old.`;
+    }
+  </script>
+</body>
+</html>
